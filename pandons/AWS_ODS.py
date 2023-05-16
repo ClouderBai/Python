@@ -14,7 +14,7 @@ pd.set_option('display.width', 5000)
 Bucket_Name = 'lly-cn-ibu-cmds-ods-prd-private'
 ExpectedBucketOwner = '968368533129'
 BASE_PATH = 'cmds-glue/input/algnmnt'
-DATE_TIME = '2023-04-20'
+DATE_TIME = '2023-05-16'
 FULL_PATH = BASE_PATH + '/' + DATE_TIME
 ifNeedS3ObjectDownload = True
 archive_name = os.path.expanduser(os.path.join('~', '.aws'))
@@ -46,21 +46,50 @@ if ifNeedS3ObjectDownload:
     shutil.copy(archive_name + '\credentials-qa', archive_name + '\credentials')
 
 files = os.listdir(FULL_PATH)
+
 s3object = FULL_PATH + '/' + files[0]
-df = pd.read_csv(s3object, dtype='string')
-df = df[['ALGNMNT_ID', 'CUST_ID', 'CUST_ALGNMNT_STRT_DT', 'CUST_ALGNMNT_END_DT']]
-print("*" * 100 + "algnmnt")
-print(df.query("ALGNMNT_ID=='CN65804' and CUST_ID=='CN-300380661HCP'"), '\n')
+
+cust_id = ['CN-300488150HCP']
+cn_code = 'CN69259'
+df = pd.read_csv(s3object, dtype='string', usecols=['ALGNMNT_ID', 'CUST_ID', 'CUST_ALGNMNT_STRT_DT', 'CUST_ALGNMNT_END_DT'])
+# =========================ALGNMNT_ID================================
+print("*" * 150 + "algnmnt File: CUST_ID")
+print(df.query("CUST_ID in @cust_id"), '\n')
+
+# =========================CN CODE================================
+print("*" * 150 + "algnmnt File: CN CODE")
+print(df.query("ALGNMNT_ID==@cn_code"), '\n')
 
 s3Object2 = FULL_PATH + '/' + files[1]
-df2 = pd.read_csv(s3Object2, dtype='string')
-df2 = df2[['ACTL_TIER', 'ALGNMNT_ID', 'CUST_ID', 'CUST_TIER_STRT_DT', 'CUST_TIER_END_DT']]
-print("*" * 100 + "tier")
-print(df2.query("(ALGNMNT_ID=='CN65804') and (CUST_ID=='CN-300380661HCP') and ACTL_TIER=='5'"), '\n')
+df2 = pd.read_csv(s3Object2, dtype='string', usecols=['ACTL_TIER', 'ALGNMNT_ID', 'CUST_ID', 'CUST_TIER_STRT_DT', 'CUST_TIER_END_DT'])
+# =========================ALGNMNT_ID================================
+print("*" * 150 + "CUST_ID tier")
+print(df2.query("(CUST_ID in @cust_id)"), '\n')
 
+# =========================CN CODE================================
+#  and (CUST_ID==@cust_id) and ACTL_TIER=='5'
+print("*" * 150 + "ALGNMNT_ID tier")
+print(df2.query("(ALGNMNT_ID==@cn_code)"), '\n')
+
+# =========================combination================================
 combination = df.merge(df2, on=["ALGNMNT_ID", "CUST_ID"], how="inner")
-print("*" * 100 + "JOIN")
-print(combination.query("ALGNMNT_ID=='CN65804' and CUST_ID=='CN-300380661HCP' and ACTL_TIER=='5'"))
+print("*" * 150 + "JOIN HCP")
+print(combination.query("CUST_ID==@cust_id"))
+
+# =========================combination:================================
+#  and CUST_ID==@cust_id and ACTL_TIER=='5'
+print("*" * 150 + "JOIN CN CODE")
+print(combination.query("ALGNMNT_ID==@cn_code"))
+
+# =========================combination:================================
+#  and CUST_ID==@cust_id and ACTL_TIER=='5'
+print("*" * 150 + "JOIN ALGNMNT_ID OR CNCODE & TIER=5")
+print(combination.query("(ALGNMNT_ID==@cn_code or CUST_ID in @cust_id) and ACTL_TIER=='5'"))
+
+# =========================combination:================================
+#  and CUST_ID==@cust_id and ACTL_TIER=='5'
+print("*" * 150 + "JOIN ALGNMNT_ID & CNCODE & TIER")
+print(combination.query("(ALGNMNT_ID==@cn_code and CUST_ID in @cust_id) and ACTL_TIER=='5'"))
 
 if __name__ == '__main__':
     pass
