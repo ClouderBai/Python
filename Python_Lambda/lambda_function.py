@@ -14,8 +14,8 @@ import sys
 # os.environ["password"] = "Win2008"
 # os.environ["host"] = "192.168.100.46"
 # os.environ["port"] = "5432"
-# os.environ["aws_access_key_id"]="AKIA6C37L5W2XEV6B4HC"
-# os.environ["aws_secret_access_key"]="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"
+# os.environ["aws_access_key_id"]=""
+# os.environ["aws_secret_access_key"]=""
 # os.environ["region_name"]="cn-northwest-1"
 # os.environ["bucket_name"]="lly-cn-ibu-idoctor-qa-public"
 s3 = boto3.resource(service_name='s3', aws_access_key_id=os.environ["aws_access_key_id"],
