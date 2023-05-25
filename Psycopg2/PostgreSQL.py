@@ -13,41 +13,41 @@ pd.set_option('display.width', 5000)
 engine = create_engine("postgresql://postgres:Win2008@localhost:5432/cmds")
 schema_engine = engine.execution_options(
     schema_translate_map={
-        None: "cmd_owner",  # no schema name -> "user_schema_one"
         "public": None,  # Table objects with schema="public" will render with no schema
+        None: "cmd_owner",  # no schema name -> "user_schema_one"
     }
 )
 
-ext_group_key_table = Table(
-     "ext_all_group_key",
-     MetaData(schema='cmd_owenr'),
-     Column("id", Integer, primary_key=True),
-     Column("cmds_id", Integer),
-     Column("star_id", Integer),
-     Column("org_lvl", Integer),
-     Column("prd_cmds_id", Integer),
-     Column("parent_org_id", Integer),
-     Column("start_cycle", Integer),
-     Column("end_cycle", Integer),
-     Column("stts_ind", Integer),
-     Column("isdeleted", Boolean),
-     Column("is_afflt", Boolean),
-     Column("been_moved", Boolean),
-     Column("algnmtid", String),
-     Column("prd_gk", String),
-     Column("createduser", String),
-     Column("modifieduser", String),
-     Column("createddate", DateTime),
-     Column("modifieddate", DateTime),
-     Column("crt_dt", DateTime),
- )
-conn = schema_engine.connect()
-gks = ext_group_key_table.select().fetch(count=100)
-conn.commit()
-
-
-
-log(gks)
+# ext_group_key_table = Table(
+#      "ext_all_group_key",
+#      MetaData(schema='cmd_owenr'),
+#      Column("id", Integer, primary_key=True),
+#      Column("cmds_id", Integer),
+#      Column("star_id", Integer),
+#      Column("org_lvl", Integer),
+#      Column("prd_cmds_id", Integer),
+#      Column("parent_org_id", Integer),
+#      Column("start_cycle", Integer),
+#      Column("end_cycle", Integer),
+#      Column("stts_ind", Integer),
+#      Column("isdeleted", Boolean),
+#      Column("is_afflt", Boolean),
+#      Column("been_moved", Boolean),
+#      Column("algnmtid", String),
+#      Column("prd_gk", String),
+#      Column("createduser", String),
+#      Column("modifieduser", String),
+#      Column("createddate", DateTime),
+#      Column("modifieddate", DateTime),
+#      Column("crt_dt", DateTime),
+#  )
+# conn = schema_engine.connect()
+# gks = ext_group_key_table.select().fetch(count=100)
+# conn.commit()
+#
+#
+#
+# log(gks)
 
 
 # connect(host='127.0.0.1', dbname='cmds', user='postgres', password='Win2008')
