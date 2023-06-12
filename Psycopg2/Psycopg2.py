@@ -5,7 +5,7 @@ import pandas as pd
 # import pandas.io.sql as sqlio
 import psycopg2
 from dotenv import load_dotenv
-from Common_Method import sql_to_dataframe, connect
+# from Common_Method import sql_to_dataframe, connect
 
 load_dotenv()
 pd.set_option('display.max_columns', None)

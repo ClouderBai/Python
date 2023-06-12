@@ -1,8 +1,8 @@
-import csv
-from io import StringIO
-
-import pandas as pd
+# import csv
+# from io import StringIO
+# import pandas as pd
 # import pandas.io.sql as sqlio
+
 import psycopg2
 import sys
 
@@ -20,6 +20,10 @@ for arg in arguments[1:]:
 schema = 'cmd_owner'
 tableName = arguments[1]
 csv_file_path = arguments[2]
+
+# tableName = 'm_prdct_ctgry'
+# csv_file_path = 'D:/Project/Nodejs/src/view_qa_sql/query.csv'
+
 print(f'schema: {schema}, tableName: {tableName}, csv_file_path: {csv_file_path}')
 
 if schema is None or tableName is None or csv_file_path is None:
@@ -27,25 +31,34 @@ if schema is None or tableName is None or csv_file_path is None:
 
 conn = psycopg2.connect(
     "host='{}' port={} dbname='{}' user={} password={}".format('127.0.0.1', 5432, 'cmds', 'postgres', 'Win2008'))
-# s_buf = StringIO()
-# with open(csv_file_path, 'r', encoding='utf-8') as file:
-#     reader = csv.reader(file)
-#     for row in reader:
-#         print(row)
-
-# df.to_csv(s_buf, header=False, index=False)
-# s_buf.seek(0)
-# columns = ', '.join(['"{}"'.format(k) for k in df.columns])
 cur = conn.cursor()
-# sql = "COPY {} ({}) FROM STDIN WITH DELIMITER ',' CSV NULL 'NULL'".format('cmd_owner.m_sales_prd_copy1', columns)
-# cur.copy_expert(sql=sql, file=s_buf)
-# conn.commit()
-# cur.close()
-# conn.close()
-cur.execute(f'TRUNCATE {schema}.{tableName};')
+
+
+cur.execute(f'TRUNCATE {schema}.{tableName} CASCADE;')
 copy_query = f"COPY {schema}.{tableName} FROM '{csv_file_path}' DELIMITER ',' CSV HEADER"
 print(copy_query)
 cur.execute(copy_query)
+print(f'Synchronize Table: {schema}.{tableName} Successfully.')
+
+"""
+# sql = "COPY {} ({}) FROM STDIN WITH DELIMITER ',' CSV NULL 'NULL'".format(f'{schema}.{tableName}', columns)
+# cur.copy_expert(sql=sql, file=s_buf)
+"""
+
+
+"""
+data = open(csv_file_path).read()
+reader = csv.DictReader(StringIO(data))
+print(reader)
+
+# for row in reader:
+#     print(row)
+# df = pd.read_csv(csv_file_path)
+s_buf = StringIO(data)
+# df.to_csv(s_buf, header=False, index=False)
+s_buf.seek(0)
+"""
+
 conn.commit()
 cur.close()
 conn.close()
