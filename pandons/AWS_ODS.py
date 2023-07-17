@@ -14,23 +14,14 @@ pd.set_option('display.width', 5000)
 Bucket_Name = 'lly-cn-ibu-cmds-ods-prd-private'
 ExpectedBucketOwner = '968368533129'
 BASE_PATH = 'cmds-glue/input/algnmnt'
-DATE_TIME = '2023-05-25'
+DATE_TIME = '2023-06-26'
 FULL_PATH = BASE_PATH + '/' + DATE_TIME
 ifNeedS3ObjectDownload = True
 archive_name = os.path.expanduser(os.path.join('~', '.aws'))
 print(archive_name)
-cust_id = ['CN-300488965HCP',
-'CN-300489069HCP',
-'CN-300489086HCP',
-'CN-300488981HCP',
-'CN-300488970HCP',
-'CN-300488980HCP',
-'CN-300400252HCP',
-'CN-300417222HCP',
-'CN-300489246HCP',
-'CN-300489068HCP',
-'CN-300488977HCP',
-'CN-300489071HCP',]
+cust_id = [
+    'CN-300492217HCP',
+]
 cn_code = 'CN69215'
 
 if not os.path.exists(FULL_PATH):

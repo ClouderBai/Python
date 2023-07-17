@@ -14,7 +14,7 @@ def lambda_handler(event, context):
             user=os.environ["DATABASE_USERNAME"],
             password=os.environ["DATABASE_PASSWORD"]
         )
-        
+
         cursor = conn.cursor()
         query = event["query"]
         cursor.execute(query)
@@ -38,10 +38,10 @@ def lambda_handler(event, context):
         cursor.close()
         conn.close()
 
-        # return {
-        #     "statusCode": 200,
-        #     "body": file_name
-        # }
-        return file_name
+        return {
+            "statusCode": 200,
+            "body": file_name
+        }
+        # return file_name
     except Exception as e:
         raise e

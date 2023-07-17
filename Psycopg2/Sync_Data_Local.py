@@ -10,43 +10,41 @@ import sys
 arguments = sys.argv
 
 # 输出文件名
-print("File name:", arguments[0])
+print("File name:             ", arguments[0])
 
 # 输出传递的参数
 for arg in arguments[1:]:
-    print("Argument:", arg)
+    print("Argument:               ", arg)
     # print(type(arg))
 
 schema = 'cmd_owner'
 tableName = arguments[1]
+tName = f'{schema}.{tableName}'
 csv_file_path = arguments[2]
 
 # tableName = 'm_prdct_ctgry'
 # csv_file_path = 'D:/Project/Nodejs/src/view_qa_sql/query.csv'
 
-print(f'schema: {schema}, tableName: {tableName}, csv_file_path: {csv_file_path}')
+print(f'schema:             tName: {tName}, csv_file_path: {csv_file_path}')
 
 if schema is None or tableName is None or csv_file_path is None:
     raise ValueError("schema table csv_file_path None")
 
-conn = psycopg2.connect(
-    "host='{}' port={} dbname='{}' user={} password={}".format('127.0.0.1', 5432, 'cmds', 'postgres', 'Win2008'))
+conn = psycopg2.connect("host='{}' port={} dbname='{}' user={} password={}".format('127.0.0.1', 5432, 'cmds', 'postgres', 'Win2008'))
 cur = conn.cursor()
 
 
-cur.execute(f'TRUNCATE {schema}.{tableName} CASCADE;')
-copy_query = f"COPY {schema}.{tableName} FROM '{csv_file_path}' DELIMITER ',' CSV HEADER"
-print(copy_query)
+cur.execute(f'TRUNCATE {tName} CASCADE;')
+copy_query = f"COPY {tName} FROM '{csv_file_path}' DELIMITER ',' CSV HEADER"
+# print(copy_query)
 cur.execute(copy_query)
-print(f'Synchronize Table: {schema}.{tableName} Successfully.')
+print(f'Synchronize Table:             {tName} Successfully.')
 
 """
 # sql = "COPY {} ({}) FROM STDIN WITH DELIMITER ',' CSV NULL 'NULL'".format(f'{schema}.{tableName}', columns)
 # cur.copy_expert(sql=sql, file=s_buf)
-"""
 
 
-"""
 data = open(csv_file_path).read()
 reader = csv.DictReader(StringIO(data))
 print(reader)

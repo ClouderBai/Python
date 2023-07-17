@@ -21,9 +21,11 @@ pd.set_option('display.width', 5000)
 """
     Write Data into CSV File
 """
-conn = psycopg2.connect("host='{}' port={} dbname='{}' user={} password={}".format('127.0.0.1', 5432, 'cmds', 'postgres', 'Win2008'))
+# conn = psycopg2.connect("host='{}' port={} dbname='{}' user={} password={}".format('127.0.0.1', 5432, 'cmds', 'postgres', 'Win2008'))
+conn = psycopg2.connect(host='127.0.0.1', port=5432, dbname='cmds', user='postgres', password='Win2008', options=f"-c search_path=cmd_owner")
 cur = conn.cursor()
-cur.execute('SELECT * FROM cmd_owner.m_sales_prd;')
+# cur.execute('SELECT * FROM cmd_owner.m_sales_prd;')
+cur.execute('SELECT * FROM m_sales_prd;')
 data = cur.fetchall()
 cols = [elt[0] for elt in cur.description]
 df = pd.DataFrame(data=data, columns=cols)
