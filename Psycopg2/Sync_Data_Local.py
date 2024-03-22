@@ -30,7 +30,10 @@ print(f'schema:             tName: {tName}, csv_file_path: {csv_file_path}')
 if schema is None or tableName is None or csv_file_path is None:
     raise ValueError("schema table csv_file_path None")
 
-conn = psycopg2.connect("host='{}' port={} dbname='{}' user={} password={}".format('127.0.0.1', 5432, 'cmds', 'postgres', 'Win2008'))
+host = '127.0.0.1'
+# host = '192.168.100.46'
+print(host)
+conn = psycopg2.connect("host='{}' port={} dbname='{}' user={} password={}".format(host, 5432, 'cmds', 'postgres', 'Win2008'))
 cur = conn.cursor()
 
 
